@@ -159,7 +159,7 @@ sudo mkdir -p "$SSL_DIR"
 
 sudo openssl genrsa -out "$SSL_DIR/localhost.key" 1024
 sudo openssl req -new -subj "$(echo -n "$SUBJ" | tr "\n" "/")" -key "$SSL_DIR/localhost.key" -out "$SSL_DIR/localhost.csr" -passin pass:$PASSPHRASE
-sudo openssl x509 -req -days 1825 -in "$SSL_DIR/localhost.csr" -signkey "$SSL_DIR/localhost.key" -out "$SSL_DIR/localhost.crt"
+sudo openssl x509 -req -days 1825 -in "$SSL_DIR/localhost.csr" -signkey "$SSL_DIR/localhost.key" -out "$SSL_DIR/localhost.crt" -sha256 -extfile "$SSL_DIR/v3.ext"
 sudo cp "$SSL_DIR/localhost.crt" "$SSL_DIR/localhost.pem"
 
 echo "<VirtualHost *:443>" >> /etc/apache2/sites-enabled/000-default.conf
