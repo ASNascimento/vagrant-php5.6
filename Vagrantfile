@@ -36,14 +36,14 @@ Vagrant.configure("2") do |config|
 	
 	config.ssh.forward_agent = true
 	
-	config.vm.synced_folder "www/", "/var/www", mount_options: ['dmode=777','fmode=666']
+	config.vm.synced_folder "www/", "/var/www/html", mount_options: ['dmode=777','fmode=666']
     config.vm.synced_folder "ssl/", "/etc/apache2/ssl", mount_options: ['dmode=777','fmode=666']
 	
 	config.vm.synced_folder "~", "/vagrant", owner: "vagrant", group: "vagrant"
 	
 	config.vm.provider "virtualbox" do |machine|
     	machine.memory = server_memory
-    	machine.name = "server-php"
+    	machine.name = "server-php-new"
     end
     config.vm.provision :shell, path: "setup.sh"
 end

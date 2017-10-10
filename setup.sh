@@ -141,7 +141,7 @@ sudo apt-get -y upgrade
 
 echo ">>> Installing *.dev self-signed SSL"
 
-SSL_DIR="/etc/apache2/ssl/"
+SSL_DIR="/etc/apache2/ssl"
 DOMAIN="localhost"
 PASSPHRASE="alexnascimento"
 
@@ -151,9 +151,10 @@ ST=Connecticut
 O=Alex Nascimento
 localityName=New Haven
 commonName=$DOMAIN
-organizationalUnitName=
-emailAddress=
+organizationalUnitName=WebdZion
+emailAddress=falecom@alexnascimento.com.br
 "
+sudo apt-get install -y openssl=1.0.1f-1ubuntu2.22
 
 sudo mkdir -p "$SSL_DIR"
 
@@ -162,14 +163,15 @@ sudo openssl req -new -subj "$(echo -n "$SUBJ" | tr "\n" "/")" -key "$SSL_DIR/lo
 sudo openssl x509 -req -days 1825 -in "$SSL_DIR/localhost.csr" -signkey "$SSL_DIR/localhost.key" -out "$SSL_DIR/localhost.crt" -sha256 -extfile "$SSL_DIR/v3.ext"
 sudo cp "$SSL_DIR/localhost.crt" "$SSL_DIR/localhost.pem"
 
+
 echo "<VirtualHost *:443>" >> /etc/apache2/sites-enabled/000-default.conf
 echo "ServerAdmin webmaster@localhost" >> /etc/apache2/sites-enabled/000-default.conf
-echo "DocumentRoot /var/www" >> /etc/apache2/sites-enabled/000-default.conf
+echo "DocumentRoot /var/www/html" >> /etc/apache2/sites-enabled/000-default.conf
 echo "<Directory />" >> /etc/apache2/sites-enabled/000-default.conf
 echo "Options FollowSymLinks" >> /etc/apache2/sites-enabled/000-default.conf
 echo "AllowOverride All" >> /etc/apache2/sites-enabled/000-default.conf
 echo "</Directory>" >> /etc/apache2/sites-enabled/000-default.conf
-echo "<Directory /var/www/>" >> /etc/apache2/sites-enabled/000-default.conf
+echo "<Directory /var/www/htlm/>" >> /etc/apache2/sites-enabled/000-default.conf
 echo "Options Indexes FollowSymLinks MultiViews" >> /etc/apache2/sites-enabled/000-default.conf
     echo "AllowOverride All" >> /etc/apache2/sites-enabled/000-default.conf
     echo "Order allow,deny" >> /etc/apache2/sites-enabled/000-default.conf
@@ -198,11 +200,11 @@ echo "Adicionando Vhost Dinamicos"
 sudo a2enmod vhost_alias
 
 echo "<Virtualhost *:80>" >> /etc/apache2/apache2.conf
-    echo 'VirtualDocumentRoot "/var/www/vhosts/%1"' >> /etc/apache2/apache2.conf
+    echo 'VirtualDocumentRoot "/var/www/html/vhosts/%1"' >> /etc/apache2/apache2.conf
     echo "ServerName vhosts.dev" >> /etc/apache2/apache2.conf 
     echo "ServerAlias *.dev" >> /etc/apache2/apache2.conf 
     echo "UseCanonicalName Off" >> /etc/apache2/apache2.conf 
-    echo '<Directory "/var/www/vhosts/*"> ' >> /etc/apache2/apache2.conf 
+    echo '<Directory "/var/www/html/vhosts/*"> ' >> /etc/apache2/apache2.conf 
         echo "Options Indexes FollowSymLinks MultiViews" >> /etc/apache2/apache2.conf 
         echo "AllowOverride All" >> /etc/apache2/apache2.conf
         echo "Order allow,deny" >> /etc/apache2/apache2.conf 
